@@ -79,7 +79,14 @@
     __weak ViewController* selfWeak = self;
     [PM setSelfOnlineStatus:!PM.selfPerson.isOnline completion:^(BOOL success) {
         
-        selfWeak.isLoading = NO;
+        if (success)
+        {
+            [selfWeak loadPersonsList];
+        }
+        else
+        {
+            selfWeak.isLoading = NO;
+        }
     }];
 }
 
@@ -90,6 +97,10 @@
     [_tableView reloadData];
     
     _statusLabel.text = PM.selfPerson.isOnline ? @"Online" : @"Offline";
+    
+    [self updateHiddenViews];
+    [self updateTimeLabel];
+    
     NSString* buttonTitle = PM.selfPerson.isOnline ? @"Go out" : @"I'm here";
     [_button setTitle:buttonTitle forState:UIControlStateNormal];
     [_button setTitle:buttonTitle forState:UIControlStateDisabled];
@@ -139,6 +150,11 @@
     {
         [_activityIndicator startAnimating];
     }
+}
+
+- (void)updateHiddenViews
+{
+    _tableView.hidden = !PM.selfPerson.isOnline;
 }
 
 #pragma mark - Actions

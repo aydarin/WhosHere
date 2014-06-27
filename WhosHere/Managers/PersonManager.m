@@ -175,7 +175,7 @@ dispatch_source_t CreateDispatchTimer(double interval, dispatch_queue_t queue, d
 
 - (void)timerTick
 {
-    if (!_isLoading)
+    if (!_isLoading && PM.selfPerson.isOnline && !PM.selfPerson.pfPerson.isDirty)
     {
         NSDate* now = [NSDate date];
         
